@@ -3,7 +3,7 @@
 #include "date.h"
 #include "patient.h"
 
-enum class States : short {in_preparation, made_up, partly_realised, realised};
+enum class States : short {in_preparation, issued, partly_realised, realised};
 
 class Prescription
 {
