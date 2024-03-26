@@ -67,21 +67,6 @@ bool Date::operator<=(const Date& date) const
     return ! (*this > date);
 }
 
-unsigned int Date::getDay() const
-{
-    return this->day;
-}
-
-unsigned int Date::getMonth() const
-{
-    return this->month;
-}
-
-unsigned int Date::getYear() const
-{
-    return this->year;
-}
-
 std::string Date::print() const
 {
     std::string day = std::to_string(this->getDay());

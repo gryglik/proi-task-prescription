@@ -18,9 +18,9 @@ public:
     bool operator<(const Date& date) const;
     bool operator<=(const Date& date) const;
 
-    unsigned int getDay() const;
-    unsigned int getMonth() const;
-    unsigned int getYear() const;
+    unsigned int getDay() const {return this->day;}
+    unsigned int getMonth() const {return this->month;};
+    unsigned int getYear() const {return this->year;};
 
     std::string print() const;
 };
