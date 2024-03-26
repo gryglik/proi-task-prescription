@@ -199,16 +199,35 @@ TEST(PrescriptionTest, create_typical)
     ASSERT_EQ(prescription.getStatus(), States::in_preparation);
 }
 
-TEST(PrescriptionTest, create_typical_issueDate)
+TEST(PrescriptionTest, create_typical_past_issue_date)
 {
-    Date today = Date();
     Prescription prescription = Prescription(
         Patient("Andrzej", "Kawka", 2004),
-        Date(23, 12, today.getYear() + 1),
-        Date(23, 11, today.getYear() + 1));
+        Date(26, 4, 2024),
+        Date(23, 3, 2024));
 
     ASSERT_EQ(prescription.getPatient().getName(), "Andrzej");
-    ASSERT_EQ(prescription.getExpiryDate(), Date(23, 12, today.getYear() + 1));
-    ASSERT_EQ(prescription.getIssueDate(), Date(23, 11, today.getYear() + 1));
+    ASSERT_EQ(prescription.getExpiryDate(), Date(26, 4, 2024));
+    ASSERT_EQ(prescription.getIssueDate(), Date(23, 3, 2024));
     ASSERT_EQ(prescription.getStatus(), States::in_preparation);
+}
+
+TEST(PrescriptionTest, create_passed_expiry_date)
+{
+    Patient patient = Patient("Andrzej", "Kawka", 2004);
+    EXPECT_THROW(Prescription(patient, Date(25, 3, 2024)), std::runtime_error);
+    EXPECT_THROW(Prescription(patient, Date(21, 3, 2024)), std::runtime_error);
+    EXPECT_THROW(Prescription(patient, Date(21, 3, 2024),
+        Date(22, 3, 2024)), std::runtime_error);
+}
+
+TEST(PrescriptionTest, create_future_issue_date)
+{
+    Date today = Date();
+    Patient patient = Patient("Andrzej", "Kawka", 2004);
+    EXPECT_THROW(Prescription(
+            patient,
+            Date(25, 4, today.getYear() + 1),
+            Date(22, 4, today.getYear() + 1)),
+        std::runtime_error);
 }

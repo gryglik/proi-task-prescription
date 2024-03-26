@@ -8,6 +8,10 @@ Prescription::Prescription(const Patient& patient, const Date& expiryDate,
       throw(std::runtime_error(
          "The expiration date must be earlier than the issuance date."));
 
+   if(issueDate > Date())
+      throw(std::runtime_error(
+         "Cannot create prescription with future issuance date."));
+
    this->patient = patient;
    this->issueDate = issueDate;
    this->expiryDate = expiryDate;
