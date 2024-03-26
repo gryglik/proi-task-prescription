@@ -120,8 +120,9 @@ TEST(DateTest, operator_comprasion_greater)
     ASSERT_EQ(Date(23, 11, 2004) > Date(22, 11, 2004), true);
     ASSERT_EQ(Date(22, 12, 2004) > Date(22, 11, 2004), true);
     ASSERT_EQ(Date(22, 11, 2005) > Date(22, 11, 2004), true);
-    ASSERT_EQ(Date(22, 11, 2004) > Date(22, 11, 2004), false);
-    ASSERT_EQ(Date(22, 11, 2004) > Date(23, 11, 2004), false);
+
+    ASSERT_EQ(Date(30, 12, 2000) > Date(1, 1, 2004), false);
+    ASSERT_EQ(Date(30, 3, 2004) > Date(26, 3, 2024), false);
 }
 
 TEST(DateTest, operator_comprasion_greater_or_equal)
@@ -136,8 +137,9 @@ TEST(DateTest, operator_comprasion_less)
     ASSERT_EQ(Date(22, 11, 2004) < Date(23, 11, 2004), true);
     ASSERT_EQ(Date(22, 11, 2004) < Date(22, 12, 2004), true);
     ASSERT_EQ(Date(22, 11, 2004) < Date(22, 11, 2005), true);
+
     ASSERT_EQ(Date(22, 11, 2004) < Date(22, 11, 2004), false);
-    ASSERT_EQ(Date(23, 11, 2004) < Date(22, 11, 2004), false);
+    ASSERT_EQ(Date(21, 11, 2005) < Date(22, 11, 2004), false);
 }
 
 TEST(DateTest, operator_comprasion_less_or_equal)
@@ -149,48 +151,50 @@ TEST(DateTest, operator_comprasion_less_or_equal)
 
 TEST(PatientTest, create_patient_typical)
 {
-    Patient patient = Patient("Andrzej", "Kawka", 2004);
+    Patient patient = Patient("Andrzej", "Kawka", Date(30, 3, 2004));
     ASSERT_EQ(patient.getName(), "Andrzej");
     ASSERT_EQ(patient.getSurname(), "Kawka");
-    ASSERT_EQ(patient.getBirthYear(), 2004);
-
+    ASSERT_EQ(patient.getBirthDate(), Date(30, 3, 2004));
 }
 
 TEST(PatientTest, create_empty_name_or_surname)
 {
-    EXPECT_THROW(Patient("", "Kawka", 2004), std::length_error);
-    EXPECT_THROW(Patient("Andrzej", "", 2004), std::length_error);
+    EXPECT_THROW(Patient("", "Kawka", Date(30, 3, 2004)), std::length_error);
+    EXPECT_THROW(Patient("Andrzej", "", Date(30, 3, 2004)), std::length_error);
 }
 
 TEST(PatientTest, create_too_long_name_or_surname)
 {
     EXPECT_THROW(
-        Patient("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Kawka", 2004),
+        Patient("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "Kawka", Date(30, 3, 2004)),
         std::length_error);
     EXPECT_THROW(
-        Patient("Andrzej", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 2004),
+        Patient("Andrzej",
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                Date(30, 3, 2004)),
         std::length_error);
 }
 
 TEST(PatientTest, create_invalid_birth_date)
 {
-    Patient("Andrzej", "Kawka", 1900);
-    Patient("Andrzej", "Kawka", 2024);
-    EXPECT_THROW(Patient("Andrzej", "Kawka", 1899), std::runtime_error);
-    EXPECT_THROW(Patient("Andrzej", "Kawka", 2025), std::runtime_error);
+    Date today;
+    EXPECT_THROW(Patient("Andrzej", "Kawka", Date(30, 3, 1899)), std::runtime_error);
+    EXPECT_THROW(Patient("Andrzej", "Kawka", Date(30, 3, today.getYear() + 1)),
+        std::runtime_error);
 }
 
 TEST(PatientTest, print)
 {
-    Patient patient = Patient("Andrzej", "Kawka", 2004);
-    ASSERT_EQ(patient.print(), "Andrzej Kawka 2004");
+    Patient patient = Patient("Andrzej", "Kawka", Date(30, 3, 2004));
+    ASSERT_EQ(patient.print(), "Andrzej Kawka\n30-03-2004");
 }
 
 TEST(PrescriptionTest, create_typical)
 {
     Date today = Date();
     Prescription prescription = Prescription(
-        Patient("Andrzej", "Kawka", 2004),
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
         Date(23, 12, today.getYear() + 1));
 
     ASSERT_EQ(prescription.getPatient().getName(), "Andrzej");
@@ -202,7 +206,7 @@ TEST(PrescriptionTest, create_typical)
 TEST(PrescriptionTest, create_typical_past_issue_date)
 {
     Prescription prescription = Prescription(
-        Patient("Andrzej", "Kawka", 2004),
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
         Date(26, 4, 2024),
         Date(23, 3, 2024));
 
@@ -214,7 +218,7 @@ TEST(PrescriptionTest, create_typical_past_issue_date)
 
 TEST(PrescriptionTest, create_passed_expiry_date)
 {
-    Patient patient = Patient("Andrzej", "Kawka", 2004);
+    Patient patient = Patient("Andrzej", "Kawka", Date(30, 3, 2004));
     EXPECT_THROW(Prescription(patient, Date(25, 3, 2024)), std::runtime_error);
     EXPECT_THROW(Prescription(patient, Date(21, 3, 2024)), std::runtime_error);
     EXPECT_THROW(Prescription(patient, Date(21, 3, 2024),
@@ -224,7 +228,7 @@ TEST(PrescriptionTest, create_passed_expiry_date)
 TEST(PrescriptionTest, create_future_issue_date)
 {
     Date today = Date();
-    Patient patient = Patient("Andrzej", "Kawka", 2004);
+    Patient patient = Patient("Andrzej", "Kawka", Date(30, 3, 2004));
     EXPECT_THROW(Prescription(
             patient,
             Date(25, 4, today.getYear() + 1),
@@ -235,7 +239,7 @@ TEST(PrescriptionTest, create_future_issue_date)
 TEST(PrescriptionTest, setStatus_typical)
 {
     Prescription prescription = Prescription(
-        Patient("Andrzej", "Kawka", 2004),
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
         Date(26, 4, 2024),
         Date(23, 3, 2024));
 
@@ -254,7 +258,7 @@ TEST(PrescriptionTest, setStatus_typical)
 TEST(PrescriptionTest, setStatus_invalid)
 {
     Prescription prescription = Prescription(
-        Patient("Andrzej", "Kawka", 2004),
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
         Date(26, 4, 2024),
         Date(23, 3, 2024));
 
