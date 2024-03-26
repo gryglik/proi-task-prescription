@@ -20,21 +20,6 @@ Patient::Patient(const std::string &name, const std::string &surname, const Date
     this->birthDate = birthDate;
 }
 
-const std::string& Patient::getName() const
-{
-    return this->name;
-}
-
-const std::string& Patient::getSurname() const
-{
-    return this->surname;
-}
-
-const Date& Patient::getBirthDate() const
-{
-    return this->birthDate;
-}
-
 const std::string Patient::print() const
 {
     return this->getName() + " " + this->getSurname() + "\n"
