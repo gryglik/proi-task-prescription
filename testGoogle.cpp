@@ -231,3 +231,48 @@ TEST(PrescriptionTest, create_future_issue_date)
             Date(22, 4, today.getYear() + 1)),
         std::runtime_error);
 }
+
+TEST(PrescriptionTest, setStatus_typical)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", 2004),
+        Date(26, 4, 2024),
+        Date(23, 3, 2024));
+
+    ASSERT_EQ(prescription.getStatus(), States::in_preparation);
+
+    prescription.setStatus(States::issued);
+    ASSERT_EQ(prescription.getStatus(), States::issued);
+
+    prescription.setStatus(States::partly_realised);
+    ASSERT_EQ(prescription.getStatus(), States::partly_realised);
+
+    prescription.setStatus(States::realised);
+    ASSERT_EQ(prescription.getStatus(), States::realised);
+}
+
+TEST(PrescriptionTest, setStatus_invalid)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", 2004),
+        Date(26, 4, 2024),
+        Date(23, 3, 2024));
+
+    prescription.setStatus(States::issued);
+    ASSERT_EQ(prescription.getStatus(), States::issued);
+    EXPECT_THROW(prescription.setStatus(States::in_preparation), std::runtime_error);
+    ASSERT_EQ(prescription.getStatus(), States::issued);
+
+    prescription.setStatus(States::partly_realised);
+    ASSERT_EQ(prescription.getStatus(), States::partly_realised);
+    EXPECT_THROW(prescription.setStatus(States::in_preparation), std::runtime_error);
+    EXPECT_THROW(prescription.setStatus(States::issued), std::runtime_error);
+    ASSERT_EQ(prescription.getStatus(), States::partly_realised);
+
+    prescription.setStatus(States::realised);
+    ASSERT_EQ(prescription.getStatus(), States::realised);
+    EXPECT_THROW(prescription.setStatus(States::in_preparation), std::runtime_error);
+    EXPECT_THROW(prescription.setStatus(States::issued), std::runtime_error);
+    EXPECT_THROW(prescription.setStatus(States::partly_realised), std::runtime_error);
+    ASSERT_EQ(prescription.getStatus(), States::realised);
+}
