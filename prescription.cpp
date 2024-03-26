@@ -18,26 +18,6 @@ Prescription::Prescription(const Patient& patient, const Date& expiryDate,
    this->status = States::in_preparation;
 }
 
-const Patient& Prescription::getPatient() const
-{
-   return this->patient;
-}
-
-const Date& Prescription::getIssueDate() const
-{
-   return this->issueDate;
-}
-
-const Date& Prescription::getExpiryDate() const
-{
-   return this->expiryDate;
-}
-
-const States& Prescription::getStatus() const
-{
-   return this->status;
-}
-
 void Prescription::setStatus(const States &status)
 {
    if(this->status <= status)
