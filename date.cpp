@@ -1,6 +1,6 @@
 #include <ctime>
 #include <string>
-#include<stdexcept>
+#include <stdexcept>
 #include "date.h"
 
 Date::Date()
@@ -42,9 +42,14 @@ bool Date::operator>(const Date& date) const
 {
     if(this->getYear() > date.getYear())
         return true;
-    if(this->getMonth() > date.getMonth())
+    else if(this->getYear() == date.getYear()
+            && this->getMonth() > date.getMonth())
         return true;
-    return this->getDay() > date.getDay();
+    else if(this->getYear() == date.getYear()
+            && this->getMonth() == date.getMonth()
+            && this->getDay() > date.getDay())
+        return true;
+    return false;
 }
 
 bool Date::operator>=(const Date& date) const
