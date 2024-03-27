@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(googletest)
 
 set(PROJECT_SOURCES prescription.cpp prescription.h date.h date.cpp patient.h patient.cpp)
 
-add_executable(prescription main.cpp ${PROJECT_SOURCES})
+add_executable(main.exe main.cpp ${PROJECT_SOURCES})
 
 add_executable(testGoogle testGoogle.cpp ${PROJECT_SOURCES})
 target_link_libraries(testGoogle PUBLIC gtest_main)

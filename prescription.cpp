@@ -45,6 +45,8 @@ bool Prescription::search(const std::string &medicine)
 
 void Prescription::add(const std::string &medicine)
 {
+   if (this->getStatus() != States::in_preparation)
+      throw (std::runtime_error("Prescription was already issued."));
    validateMedicine(medicine);
    if (this->search(medicine))
       throw (std::runtime_error("Medicine: '" + medicine + "' already in the prescription."));
@@ -82,19 +84,23 @@ std::string Prescription::printMedicines() const
 std::string Prescription::print() const
 {
    std::string sts;
-   switch (status)
+   switch (this->getStatus())
    {
       case States::in_preparation:
          sts = "in preparation";
+         break;
 
       case States::issued:
          sts = "issued";
+         break;
 
       case States::partly_realised:
          sts = "partly realised";
+         break;
 
       case States::realised:
          sts = "realised";
+         break;
    }
    return "[ PATIENT ]\n"
       + this->getPatient().print()

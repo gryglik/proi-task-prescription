@@ -1,3 +1,6 @@
+# Autor
+- Autor: Michał Gryglicki
+- Numer indeksu: 331380
 # Zadanie:
 
 Proszę zaimplementować klasę reprezentującą receptę. Recepta zawiera dane pacjenta, datę
@@ -45,7 +48,7 @@ Klasa reprezentująca receptę za pomocą pól: `(Patient) patient`, `(Date) iss
     `in_preparation -> issued -> partly_realised -> realised`
 * Nie można wystawić/przekazać do realizacji pustej recepty
 #### Konstruktory
-* Konstruktor domyślny - tworzy instancje klasy, do inicjalizacji obiektu recepty `Prescription` konieczne jest podanie pacjenta `Patient` i daty wygaśnięcia `expiryDate` opcjonalnie można podać datę wystawienia
+* Konstruktor - tworzy instancje klasy, do inicjalizacji obiektu recepty `Prescription` konieczne jest podanie pacjenta `Patient` i daty wygaśnięcia `expiryDate` opcjonalnie można podać datę wystawienia
 #### Metody
 * `setStatus()` - zmienia statusu recepty
 * `search((string) medicine)` - zwraca (bool) informację czy dany lek znajduje się na recepcie
@@ -75,12 +78,24 @@ Klasa reprezentująca receptę za pomocą pól: `(Patient) patient`, `(Date) iss
 # Działanie pliku main
 1. Z własną datą wystawienia
 ```
-./main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status}
+build/main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status (in_preaparation, issued, partly_realised, realised)}
 ```
-2. Z systemową (dzisiejszą) datą wystawienia
+np.
+
 ```
-./main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status}
+build/main.exe Michal Gryglicki 30-03-2004 28-03-2024 28-02-2024 Clatra_10_mg Xanax_20_mg issued
 ```
 
+2. Z systemową (dzisiejszą) datą wystawienia
+```
+build/main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} today {lek_1} {lek_2} ... {lek_n} {status (in_preaparation, issued, partly_realised, realised)}
+```
+np.
+```
+build/main.exe Michal Gryglicki 30-03-2004 28-03-2024 today Clatra_10_mg Xanax_20_mg Izotziaja_20mg realised
+
+```
+
+**Uwaga** Poszczególne nazwy leków nie mogą zawierać spacji
 # Przemyślenia
 Czy metoda prywatna obiektu może rzucać wyjątki?

@@ -316,7 +316,6 @@ TEST(PrescriptionTest, search_typical)
     ASSERT_EQ(prescription.search("Izotziaja, 0,5 mg/g, żel, 20 g"), false);
 }
 
-
 TEST(PrescriptionTest, add_typical)
 {
     Prescription prescription = Prescription(
@@ -325,6 +324,18 @@ TEST(PrescriptionTest, add_typical)
     prescription.add("Clatra, 20 mg, tabletki, 30 szt.");
     ASSERT_EQ(prescription.getCount(), 1);
     ASSERT_EQ(prescription.search("Clatra, 20 mg, tabletki, 30 szt."), true);
+}
+
+TEST(PrescriptionTest, add_wrong_status)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    ASSERT_EQ(prescription.getStatus(), States::in_preparation);
+    prescription.add("Clatra, 20 mg, tabletki, 30 szt.");
+    ASSERT_EQ(prescription.getStatus(), States::in_preparation);
+    prescription.setStatus(States::issued);
+    EXPECT_THROW(prescription.add("Clatra, 30mg"), std::runtime_error);
 }
 
 TEST(PrescriptionTest, add_empty_medicine)
@@ -441,7 +452,7 @@ TEST(PrescriptionTest, print_typical)
     "Clatra, 20 mg, tabletki, 30 szt.\n"
     "Xanax, 0,25 mg, tabletki, 30 szt.\n"
     "\n"
-    "[ STATUS ] realised\n"
+    "[ STATUS ] in preparation\n"
     "\n"
     "[ ISSUE DATE ] 27-03-2024\n"
     "\n"
