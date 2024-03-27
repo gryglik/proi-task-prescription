@@ -280,3 +280,60 @@ TEST(PrescriptionTest, setStatus_invalid)
     EXPECT_THROW(prescription.setStatus(States::partly_realised), std::runtime_error);
     ASSERT_EQ(prescription.getStatus(), States::realised);
 }
+
+TEST(PrescriptionTest, add_typical)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    prescription.add("Clatra, 20 mg, tabletki, 30 szt.");
+    ASSERT_EQ(prescription.getCount(), 1);
+    ASSERT_EQ(prescription.search("Clatra, 20 mg, tabletki, 30 szt."), true);
+    ASSERT_EQ(prescription.search("Izotziaja, 0,5 mg/g, żel, 20 g"), false);
+}
+
+TEST(PrescriptionTest, modify_typical)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    prescription.add("Clatra, 20 mg, tabletki, 30 szt.");
+    prescription.add("Xanax, 0,25 mg, tabletki, 30 szt.");
+    ASSERT_EQ(prescription.getCount(), 2);
+    prescription.modify("Xanax, 0,25 mg, tabletki, 30 szt.", "Xanax, 0,50 mg, tabletki, 30 szt.");
+    ASSERT_EQ(prescription.search("Xanax, 0,50 mg, tabletki, 30 szt."), true);
+    ASSERT_EQ(prescription.search("Xanax, 0,25 mg, tabletki, 30 szt."), false);
+}
+
+TEST(PrescriptionTest, remove_typical)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    prescription.add("Clatra, 20 mg, tabletki, 30 szt.");
+    prescription.add("Xanax, 0,25 mg, tabletki, 30 szt.");
+    prescription.add("Xanax, 0,50 mg, tabletki, 30 szt.");
+    prescription.add("Xanax, 1,00 mg, tabletki, 30 szt.");
+    prescription.remove("Xanax, 0,25 mg, tabletki, 30 szt.");
+    ASSERT_EQ(prescription.getCount(), 3);
+    ASSERT_EQ(prescription.search("Xanax, 0,25 mg, tabletki, 30 szt."), false);
+}
+
+TEST(PrescriptionTest, printMedicines_typical)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    prescription.add("Clatra");
+    prescription.add("Xanax");
+    prescription.add("Bilagra");
+    ASSERT_EQ(prescription.printMedicines(), "Clatra\nXanax\nBilagra");
+}
+
+TEST(PrescriptionTest, printMedicines_empty)
+{
+    Prescription prescription = Prescription(
+        Patient("Andrzej", "Kawka", Date(30, 3, 2004)),
+        Date(26, 4, 2024));
+    ASSERT_EQ(prescription.printMedicines(), "");
+}

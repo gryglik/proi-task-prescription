@@ -12,8 +12,12 @@ private:
     Patient patient;
     Date issueDate;
     Date expiryDate;
-    States status;
+    States status = States::in_preparation;
     std::vector<std::string> medicines;
+
+    int lastSearch = -1;
+    inline void validateMedicine(const std::string& medicine) const;
+
 public:
     Prescription(const Patient& patient, const Date& expiryDate,
         const Date& issueDate=Date());
@@ -22,14 +26,15 @@ public:
     const Date& getIssueDate() const {return this->issueDate;}
     const Date& getExpiryDate() const {return this->expiryDate;}
     const States& getStatus() const {return this->status;}
+    unsigned int getCount() const {return this->medicines.size();}
 
     void setStatus(const States &status);
 
-    bool search(const std::string& medicine) const;
-    bool add(const std::string& medicine);
-    bool modify(const std::string& medicine, const std::string& new_medicine);
-    bool remove(const std::string& medicine);
-    unsigned int count() const;
+    bool search(const std::string& medicine);
+    void add(const std::string& medicine);
+    void modify(const std::string& medicine, const std::string& new_medicine);
+    void remove(const std::string& medicine);
 
-    std::string print(const Prescription& prescription) const;
+    std::string printMedicines() const;
+    std::string print() const;
 };
