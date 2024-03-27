@@ -69,7 +69,10 @@ void Prescription::remove(const std::string& medicine)
 
 std::string Prescription::printMedicines() const
 {
-   std::string medicinesString = "";
+   if (!this->getCount())
+      return "";
+
+   std::string medicinesString;
    for (unsigned int i=0; i < this->getCount() - 1; i++)
       medicinesString += this->medicines[i] + "\n" ;
    medicinesString += medicines[this->getCount() - 1];
@@ -78,13 +81,26 @@ std::string Prescription::printMedicines() const
 
 std::string Prescription::print() const
 {
-   return ">--- PATIENT:\n"
+   std::string sts;
+   switch (status)
+   {
+      case States::in_preparation:
+         sts = "in preparation";
+
+      case States::issued:
+         sts = "issued";
+
+      case States::partly_realised:
+         sts = "partly realised";
+
+      case States::realised:
+         sts = "realised";
+   }
+   return "[ PATIENT ]\n"
       + this->getPatient().print()
-      + "\n\n>--- MEDICINES:\n"
+      + "\n\n[ MEDICINES ]\n"
       + this->printMedicines()
-      + "\n\n>--- STATUS:\n"
-      + "\n\n>--- ISSUE DATE:\n"
-      + this->getIssueDate().print()
-      + "\n>--- EXPIRY DATE:\n"
-      + this->getExpiryDate().print();
+      + "\n\n[ STATUS ] " + sts
+      + "\n\n[ ISSUE DATE ] " + this->getIssueDate().print()
+      + "\n\n[ EXPIRY DATE ] " + this->getExpiryDate().print();
 }
