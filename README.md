@@ -75,7 +75,12 @@ Klasa reprezentująca receptę za pomocą pól: `(Patient) patient`, `(Date) iss
 [ EXPIRY DATE ] {expiryDate}
 ```
 
-# Działanie pliku main
+# Działanie programu main
+#### Założenia
+Program tworzy instancje klasy Prescription za pomocą argumentów przekazywanych do programu, następnie wypisuje reprezentację obiektu na standardowe wyjście (std::cout)
+#### Uruchomienie programu
+**Uwaga** Poszczególne nazwy leków nie mogą zawierać spacji
+
 1. Z własną datą wystawienia
 ```
 build/main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status (in_preaparation, issued, partly_realised, realised)}
@@ -96,6 +101,5 @@ build/main.exe Michal Gryglicki 30-03-2004 28-03-2024 today Clatra_10_mg Xanax_2
 
 ```
 
-**Uwaga** Poszczególne nazwy leków nie mogą zawierać spacji
 # Przemyślenia
 Czy metoda prywatna obiektu może rzucać wyjątki?
