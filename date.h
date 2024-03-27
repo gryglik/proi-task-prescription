@@ -10,6 +10,7 @@ private:
 public:
     Date();
     Date(unsigned int day, unsigned int month, unsigned int year);
+    Date(const std::string &date);
 
     bool operator==(const Date& date) const;
     bool operator!=(const Date& date) const;

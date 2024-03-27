@@ -26,6 +26,27 @@ Date::Date(unsigned int day, unsigned int month, unsigned int year)
     this->year = year;
 }
 
+Date::Date(const std::string &date)
+{
+    if (date.size() != 10
+        || ! ('0' <= date[0] <= '9')
+        || ! ('0' <= date[1] <= '9')
+        || date[2] != '-'
+        || ! ('0' <= date[3] <= '9')
+        || ! ('0' <= date[4] <= '9')
+        || date[5] != '-'
+        || ! ('0' <= date[6] <= '9')
+        || ! ('0' <= date[7] <= '9')
+        || ! ('0' <= date[8] <= '9')
+        || ! ('0' <= date[9] <= '9'))
+        throw (std::runtime_error("Invalid date format"));
+    unsigned int day = 10 * (date[0] - '0') + (date[1] - '0');
+    unsigned int month = 10 * (date[3] - '0') + (date[4] - '0');
+    unsigned int year = 1000 * (date[6] - '0') + 100 * (date[7] - '0')
+        + 10 * (date[8] - '0') + (date[9] - '0');
+    *this = Date(day, month, year);
+}
+
 bool Date::operator==(const Date& date) const
 {
     return this->getYear() == date.getYear()

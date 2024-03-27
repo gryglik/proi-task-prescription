@@ -106,6 +106,18 @@ TEST(DateTest, create_invalid_year)
     EXPECT_THROW(Date(23, 11, 10000), std::runtime_error);
 }
 
+TEST(DateTest, create_from_string)
+{
+    Date date1 = Date("12-03-2024");
+    ASSERT_EQ(date1.print(), "12-03-2024");
+}
+
+TEST(DateTest, create_from_string_invalid)
+{
+    ASSERT_THROW(Date("10/12/2004"), std::runtime_error);
+    ASSERT_THROW(Date("3-3-2004"), std::runtime_error);
+}
+
 TEST(DateTest, operator_comprasion_equality)
 {
     ASSERT_EQ(Date(23, 11, 2004) == Date(23, 11, 2004), true);
@@ -413,7 +425,7 @@ TEST(PrescriptionTest, printMedicines_empty)
     ASSERT_EQ(prescription.printMedicines(), "");
 }
 
-TEST(PrescriptionTestt, print_typical)
+TEST(PrescriptionTest, print_typical)
 {
     Prescription prescription = Prescription(
         Patient("Andrzej", "Kawka", Date(30, 3, 2004)),

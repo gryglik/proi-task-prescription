@@ -13,11 +13,12 @@ Klasa reprezentująca datę za pomocą trzech pól: `(uint) day`, `(uint) month`
 * Sprawdzanie poprawności tworzonego obiektu(daty)
 #### Konstruktory
 * Kontruktor domyślny - tworzy instancje klasy z datą systemową.
-* Konstruktor szczegółowy - tworzy instancje klasy z podanych danych (day, month, year).
+* Konstruktor - tworzy instancje klasy z podanych danych (day, month, year).
+* Konstruktor - tworzy instancję klasy za pomocą podanego (string) napisu w formacie dd-mm-yyyy
 #### Operatory
 * Przeładowane operatory porównania (==, !=, >, >=, <, <=)
 #### Metody
-* print() - zwraca (string) napis z reprezentacją datą w postaci dd-mm-yyyy
+* `print()` - zwraca (string) napis z reprezentacją datą w postaci dd-mm-yyyy
 
 ### 2. Patient
 #### Założenia
@@ -28,7 +29,7 @@ Klasa reprezentująca pacjenta za pomocą trzch pól: `(string) name`, `(string)
 #### Konstruktory
 * Konstruktor domyślny - tworzy instancję klasy z niezainicjalizowanymi polami
 #### Metody
-* print() - zwraca (string) napis z reprezentacją pacjenta w postaci
+* `print()` - zwraca (string) napis z reprezentacją pacjenta w postaci
 ```
 {name} {surname}
 {date}
@@ -43,6 +44,43 @@ Klasa reprezentująca receptę za pomocą pól: `(Patient) patient`, `(Date) iss
 * Status recepty może być zmieniany tylko zgodnie z kierunkiem strzałek
     `in_preparation -> issued -> partly_realised -> realised`
 * Nie można wystawić/przekazać do realizacji pustej recepty
+#### Konstruktory
+* Konstruktor domyślny - tworzy instancje klasy, do inicjalizacji obiektu recepty `Prescription` konieczne jest podanie pacjenta `Patient` i daty wygaśnięcia `expiryDate` opcjonalnie można podać datę wystawienia
+#### Metody
+* `setStatus()` - zmienia statusu recepty
+* `search((string) medicine)` - zwraca (bool) informację czy dany lek znajduje się na recepcie
+* `modify((string) medicine, (string) new_medicine)` - modyfikuje podany lek na recepcie
+* `remove((string) medicine)` - usuwa podany lek z recepty
+* `printMedicines()` - zwraca (string) zapis z wszystkimi lekami na recepcie (w kolejności dodawania)
+* `print()` - zwraca (string) reprezentację recepty w postaci napisu
+```
+[ PATIENT ]
+{name} {surname}
+{date}
+
+[ MEDICINES ]
+{medicine_1}
+{medicine_2}
+.
+.
+{medicine_n}
+
+[ STATUS ] {status}
+
+[ ISSUE DATE ] {issueDate}
+
+[ EXPIRY DATE ] {expiryDate}
+```
+
+# Działanie pliku main
+1. Z własną datą wystawienia
+```
+./main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status}
+```
+2. Z systemową (dzisiejszą) datą wystawienia
+```
+./main.exe {imie} {nazwisko} {data urodzenia (dd-mm-yyyy)} {data ważności (dd-mm-yyyy)} {data wystawienia (dd-mm-yyyy)} {lek_1} {lek_2} ... {lek_n} {status}
+```
 
 # Przemyślenia
 Czy metoda prywatna obiektu może rzucać wyjątki?
